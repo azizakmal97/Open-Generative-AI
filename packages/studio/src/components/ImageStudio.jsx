@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { generateImage, generateI2I, uploadFile } from "../muapi.js";
+import DrawModal from "./DrawModal.jsx";
 import {
   t2iModels,
   i2iModels,
@@ -840,6 +841,7 @@ export default function ImageStudio({
   const [generating, setGenerating] = useState(false);
   const [generateError, setGenerateError] = useState(null);
   const [fullscreenUrl, setFullscreenUrl] = useState(null);
+  const [isDrawModalOpen, setIsDrawModalOpen] = useState(false);
 
   // ── Canvas / history state ──────────────────────────────────────────────
   const [currentImageUrl, setCurrentImageUrl] = useState(null);
@@ -1574,7 +1576,7 @@ export default function ImageStudio({
               <button
                 type="button"
                 className="h-[34px] flex items-center gap-2 px-3.5 bg-[#16161a]/60 hover:bg-[#202026]/80 rounded-md transition-all border border-white/[0.06] group whitespace-nowrap shadow-inner"
-                onClick={() => alert("Drawing canvas feature is coming soon!")}
+                onClick={() => setIsDrawModalOpen(true)}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-40 text-white group-hover:text-[#22d3ee] transition-colors">
                   <path d="M12 20h9" />
@@ -1637,6 +1639,15 @@ export default function ImageStudio({
           />
         </div>
       )}
+
+      {/* ── DRAW CANVAS MODAL ── */}
+      <DrawModal
+        isOpen={isDrawModalOpen}
+        onClose={() => setIsDrawModalOpen(false)}
+        apiKey={apiKey}
+        batchSize={batchSize}
+        onAddHistoryItem={addToHistory}
+      />
     </div>
   );
 }
