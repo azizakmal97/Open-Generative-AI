@@ -94,9 +94,9 @@ const translations = {
         'settings.muapiKeyLabel': 'Muapi or OpenRouter API Key',
         'settings.keyPlaceholder': 'Muapi key or OpenRouter key (sk-or-...)',
         'settings.keyNote': 'Your API key is stored locally. Muapi keys go only to api.muapi.ai; OpenRouter keys (sk-or-...) go only to openrouter.ai and enable image and video generation.',
-        'settings.orImageModelLabel': 'OpenRouter Image Model',
-        'settings.orVideoModelLabel': 'OpenRouter Video Model',
-        'settings.orModelHint': '(used only with an sk-or-... key)',
+        'settings.orImageModelLabel': 'OpenRouter Fallback Image Model',
+        'settings.orVideoModelLabel': 'OpenRouter Fallback Video Model',
+        'settings.orModelHint': '(sk-or-... keys: used when the model picked in the studio has no OpenRouter equivalent)',
         'settings.invalidKey': 'Please enter a valid API key.',
 
         // Auth Modal
@@ -298,9 +298,9 @@ const translations = {
         'settings.muapiKeyLabel': 'Muapi 或 OpenRouter API 密钥',
         'settings.keyPlaceholder': 'Muapi 密钥或 OpenRouter 密钥（sk-or-...）',
         'settings.keyNote': '您的 API 密钥仅存储在本地。Muapi 密钥仅发送到 api.muapi.ai；OpenRouter 密钥（sk-or-...）仅发送到 openrouter.ai，可用于图像和视频生成。',
-        'settings.orImageModelLabel': 'OpenRouter 图像模型',
-        'settings.orVideoModelLabel': 'OpenRouter 视频模型',
-        'settings.orModelHint': '（仅在使用 sk-or-... 密钥时生效）',
+        'settings.orImageModelLabel': 'OpenRouter 备用图像模型',
+        'settings.orVideoModelLabel': 'OpenRouter 备用视频模型',
+        'settings.orModelHint': '（sk-or-... 密钥：当工作室中选择的模型在 OpenRouter 上没有对应模型时使用）',
         'settings.invalidKey': '请输入有效的 API 密钥。',
 
         // Auth Modal

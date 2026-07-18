@@ -33,6 +33,7 @@ export class MuapiClient {
                 prompt: params.prompt,
                 imageUrls: params.image_url ? [params.image_url] : [],
                 aspectRatio: params.aspect_ratio,
+                model: params.model,
             });
         }
 
@@ -260,6 +261,7 @@ export class MuapiClient {
                 prompt: params.prompt,
                 imageUrls,
                 aspectRatio: params.aspect_ratio,
+                model: params.model,
             });
         }
 

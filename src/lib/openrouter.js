@@ -26,6 +26,73 @@ export function getVideoModel() {
     return localStorage.getItem('openrouter_video_model') || DEFAULT_VIDEO_MODEL;
 }
 
+// App catalog model id -> OpenRouter slug, for models OpenRouter also hosts.
+// Anything not listed falls back to the Settings model (getImageModel /
+// getVideoModel), since most of the Muapi catalog has no OpenRouter equivalent.
+const IMAGE_MODEL_MAP = {
+    'nano-banana': 'google/gemini-2.5-flash-image',
+    'nano-banana-pro': 'google/gemini-3-pro-image',
+    'nano-banana-2': 'google/gemini-3.1-flash-image',
+    'gpt4o-text-to-image': 'openai/gpt-5-image-mini',
+    'gpt4o-image-to-image': 'openai/gpt-5-image-mini',
+    'gpt4o-edit': 'openai/gpt-5-image-mini',
+    'gpt-image-1.5': 'openai/gpt-5-image',
+    'gpt-image-2': 'openai/gpt-5.4-image-2',
+};
+
+const VIDEO_MODEL_MAP = {
+    'veo3-text-to-video': 'google/veo-3.1',
+    'veo3-fast-text-to-video': 'google/veo-3.1-fast',
+    'veo3.1-text-to-video': 'google/veo-3.1',
+    'veo3.1-fast-text-to-video': 'google/veo-3.1-fast',
+    'veo3.1-lite-text-to-video': 'google/veo-3.1-lite',
+    'kling-v3.0-pro-text-to-video': 'kwaivgi/kling-v3.0-pro',
+    'kling-v3.0-standard-text-to-video': 'kwaivgi/kling-v3.0-std',
+    'kling-o1-text-to-video': 'kwaivgi/kling-video-o1',
+    'wan2.6-text-to-video': 'alibaba/wan-2.6',
+    'seedance-v1.5-pro-t2v': 'bytedance/seedance-1-5-pro',
+    'seedance-v1.5-pro-t2v-fast': 'bytedance/seedance-1-5-pro',
+    'seedance-v2.0-t2v': 'bytedance/seedance-2.0',
+    'minimax-hailuo-2.3-pro-t2v': 'minimax/hailuo-2.3',
+    'minimax-hailuo-2.3-standard-t2v': 'minimax/hailuo-2.3',
+    'openai-sora-2-pro-text-to-video': 'openai/sora-2-pro',
+    'grok-imagine-text-to-video': 'x-ai/grok-imagine-video',
+    'veo3-image-to-video': 'google/veo-3.1',
+    'veo3-fast-image-to-video': 'google/veo-3.1-fast',
+    'veo3.1-image-to-video': 'google/veo-3.1',
+    'veo3.1-fast-image-to-video': 'google/veo-3.1-fast',
+    'veo3.1-lite-image-to-video': 'google/veo-3.1-lite',
+    'veo3.1-reference-to-video': 'google/veo-3.1',
+    'kling-v3.0-pro-image-to-video': 'kwaivgi/kling-v3.0-pro',
+    'kling-v3.0-standard-image-to-video': 'kwaivgi/kling-v3.0-std',
+    'kling-o1-image-to-video': 'kwaivgi/kling-video-o1',
+    'wan2.6-image-to-video': 'alibaba/wan-2.6',
+    'seedance-v1.5-pro-i2v': 'bytedance/seedance-1-5-pro',
+    'seedance-v1.5-pro-i2v-fast': 'bytedance/seedance-1-5-pro',
+    'seedance-v2.0-i2v': 'bytedance/seedance-2.0',
+    'minimax-hailuo-2.3-pro-i2v': 'minimax/hailuo-2.3',
+    'minimax-hailuo-2.3-standard-i2v': 'minimax/hailuo-2.3',
+    'minimax-hailuo-2.3-fast': 'minimax/hailuo-2.3',
+    'openai-sora-2-pro-image-to-video': 'openai/sora-2-pro',
+    'grok-imagine-image-to-video': 'x-ai/grok-imagine-video',
+};
+
+export function resolveImageModel(appModelId) {
+    const mapped = appModelId && IMAGE_MODEL_MAP[appModelId];
+    if (!mapped && appModelId) {
+        console.log(`[OpenRouter] "${appModelId}" has no OpenRouter equivalent; using ${getImageModel()}`);
+    }
+    return mapped || getImageModel();
+}
+
+export function resolveVideoModel(appModelId) {
+    const mapped = appModelId && VIDEO_MODEL_MAP[appModelId];
+    if (!mapped && appModelId) {
+        console.log(`[OpenRouter] "${appModelId}" has no OpenRouter equivalent; using ${getVideoModel()}`);
+    }
+    return mapped || getVideoModel();
+}
+
 function headers(key) {
     return {
         'Content-Type': 'application/json',
@@ -59,9 +126,10 @@ async function toDataUrl(url) {
  * @param {string} opts.prompt
  * @param {string[]} [opts.imageUrls] - Reference images (data or hosted URLs)
  * @param {string} [opts.aspectRatio] - Passed as a prompt hint
+ * @param {string} [opts.model] - App catalog model id, mapped to an OpenRouter slug
  * @returns {Promise<{status: string, url: string, outputs: string[]}>}
  */
-export async function generateImage(key, { prompt, imageUrls, aspectRatio }) {
+export async function generateImage(key, { prompt, imageUrls, aspectRatio, model }) {
     let text = (prompt || '').trim() || 'Generate an image.';
     if (aspectRatio) text += `\n\nGenerate the image with aspect ratio ${aspectRatio}.`;
 
@@ -72,7 +140,7 @@ export async function generateImage(key, { prompt, imageUrls, aspectRatio }) {
     }
 
     const body = {
-        model: getImageModel(),
+        model: resolveImageModel(model),
         messages: [{ role: 'user', content }],
         modalities: ['image', 'text'],
     };
@@ -117,7 +185,7 @@ export async function generateImage(key, { prompt, imageUrls, aspectRatio }) {
  */
 export async function generateVideo(key, params) {
     const body = {
-        model: getVideoModel(),
+        model: resolveVideoModel(params.model),
         prompt: (params.prompt || '').trim() || 'Generate a video.',
     };
     if (params.duration) body.duration = Number(params.duration) || undefined;

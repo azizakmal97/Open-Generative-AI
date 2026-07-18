@@ -63,8 +63,9 @@ Use all studios (Image, Video, Audio, AI Clipping, Vibe Motion, Lip Sync, Cinema
 
 This fork adds support for [OpenRouter](https://openrouter.ai) API keys alongside Muapi keys. Paste an OpenRouter key (`sk-or-...`) in Settings instead of a Muapi key and the app routes requests to OpenRouter automatically:
 
-- **Image generation & editing** — via OpenRouter chat completions with image output (default model: `google/gemini-2.5-flash-image`, configurable in Settings)
-- **Text-to-video & image-to-video** — via OpenRouter's async `/api/v1/videos` job API (default model: `google/veo-3.1`, configurable in Settings; any model from [openrouter.ai/collections/video-models](https://openrouter.ai/collections/video-models) works)
+- **Image generation & editing** — via OpenRouter chat completions with image output
+- **Text-to-video & image-to-video** — via OpenRouter's async `/api/v1/videos` job API
+- **The model picked in the studio GUI is used automatically** when OpenRouter hosts it (Nano Banana → `google/gemini-2.5-flash-image`, Veo 3.1 → `google/veo-3.1`, Sora 2 Pro, Kling 3.0, Seedance, Hailuo 2.3, Wan 2.6, Grok Imagine, GPT image models, …). Models with no OpenRouter equivalent fall back to the models configured in Settings (defaults: `google/gemini-2.5-flash-image` / `google/veo-3.1`; any model from [openrouter.ai/collections/video-models](https://openrouter.ai/collections/video-models) works)
 - Uploaded reference images stay local as data URLs — nothing is uploaded to Muapi when using an OpenRouter key
 - Video-to-video tools and lip-sync have no OpenRouter equivalent and still require a Muapi key or local models
 
