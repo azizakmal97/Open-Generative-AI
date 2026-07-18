@@ -71,6 +71,15 @@ This fork adds support for [OpenRouter](https://openrouter.ai) API keys alongsid
 
 Muapi keys keep working exactly as before.
 
+### Workflow Studio & Agent Studio in the desktop app
+
+Upstream, the desktop build shows an "Available in the web app" placeholder for these two studios (their builders live in submodules that aren't bundled). This fork embeds the hosted web app for each inside the desktop window via an Electron `<webview>` (`webviewTag` enabled), with an "Open in browser" fallback:
+
+- Workflow Studio → `https://muapi.ai/workflow`
+- Agent Studio → `https://muapi.ai/agents`
+
+These run on the hosted backend, so they need internet and a muapi.ai account (log in inside the embedded view) and do **not** use an OpenRouter key.
+
 ---
 
 ## ⬇️ Download Desktop App
