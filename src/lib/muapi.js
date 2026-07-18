@@ -1,4 +1,5 @@
 import { getModelById, getVideoModelById, getI2IModelById, getI2VModelById, getV2VModelById, getLipSyncModelById } from './models.js';
+import * as openrouter from './openrouter.js';
 
 export class MuapiClient {
     constructor() {
@@ -26,6 +27,14 @@ export class MuapiClient {
      */
     async generateImage(params) {
         const key = this.getKey();
+
+        if (openrouter.isOpenRouterKey(key)) {
+            return openrouter.generateImage(key, {
+                prompt: params.prompt,
+                imageUrls: params.image_url ? [params.image_url] : [],
+                aspectRatio: params.aspect_ratio,
+            });
+        }
 
         // Resolve endpoint from model definition
         const modelInfo = getModelById(params.model);
@@ -171,6 +180,10 @@ export class MuapiClient {
     async generateVideo(params) {
         const key = this.getKey();
 
+        if (openrouter.isOpenRouterKey(key)) {
+            return openrouter.generateVideo(key, params);
+        }
+
         const modelInfo = getVideoModelById(params.model);
         const endpoint = modelInfo?.endpoint || params.model;
         const url = `${this.baseUrl}/api/v1/${endpoint}`;
@@ -238,6 +251,18 @@ export class MuapiClient {
      */
     async generateI2I(params) {
         const key = this.getKey();
+
+        if (openrouter.isOpenRouterKey(key)) {
+            const imageUrls = params.images_list?.length > 0
+                ? params.images_list
+                : (params.image_url ? [params.image_url] : []);
+            return openrouter.generateImage(key, {
+                prompt: params.prompt,
+                imageUrls,
+                aspectRatio: params.aspect_ratio,
+            });
+        }
+
         const modelInfo = getI2IModelById(params.model);
         const endpoint = modelInfo?.endpoint || params.model;
         const url = `${this.baseUrl}/api/v1/${endpoint}`;
@@ -308,6 +333,11 @@ export class MuapiClient {
      */
     async generateI2V(params) {
         const key = this.getKey();
+
+        if (openrouter.isOpenRouterKey(key)) {
+            return openrouter.generateVideo(key, params);
+        }
+
         const modelInfo = getI2VModelById(params.model);
         const endpoint = modelInfo?.endpoint || params.model;
         const url = `${this.baseUrl}/api/v1/${endpoint}`;
@@ -393,6 +423,13 @@ export class MuapiClient {
      */
     async uploadFile(file) {
         const key = this.getKey();
+
+        // With an OpenRouter key there is no upload endpoint; keep the file
+        // local as a data URL, which downstream OpenRouter calls accept.
+        if (openrouter.isOpenRouterKey(key)) {
+            return openrouter.fileToDataUrl(file);
+        }
+
         const url = `${this.baseUrl}/api/v1/upload_file`;
 
         const formData = new FormData();
@@ -431,6 +468,11 @@ export class MuapiClient {
      */
     async processV2V(params) {
         const key = this.getKey();
+
+        if (openrouter.isOpenRouterKey(key)) {
+            throw new Error('OpenRouter does not offer video-to-video tools. Use a Muapi key (muapi.ai) or local models for this.');
+        }
+
         const modelInfo = getV2VModelById(params.model);
         const endpoint = modelInfo?.endpoint || params.model;
         const url = `${this.baseUrl}/api/v1/${endpoint}`;
@@ -493,6 +535,11 @@ export class MuapiClient {
      */
     async processLipSync(params) {
         const key = this.getKey();
+
+        if (openrouter.isOpenRouterKey(key)) {
+            throw new Error('OpenRouter does not offer lip-sync models. Use a Muapi key (muapi.ai) or local models for this.');
+        }
+
         const modelInfo = getLipSyncModelById(params.model);
         const endpoint = modelInfo?.endpoint || params.model;
         const url = `${this.baseUrl}/api/v1/${endpoint}`;

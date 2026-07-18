@@ -59,6 +59,19 @@ Use all studios (Image, Video, Audio, AI Clipping, Vibe Motion, Lip Sync, Cinema
 
 ---
 
+## 🔀 OpenRouter API Key Support (this fork)
+
+This fork adds support for [OpenRouter](https://openrouter.ai) API keys alongside Muapi keys. Paste an OpenRouter key (`sk-or-...`) in Settings instead of a Muapi key and the app routes requests to OpenRouter automatically:
+
+- **Image generation & editing** — via OpenRouter chat completions with image output (default model: `google/gemini-2.5-flash-image`, configurable in Settings)
+- **Text-to-video & image-to-video** — via OpenRouter's async `/api/v1/videos` job API (default model: `google/veo-3.1`, configurable in Settings; any model from [openrouter.ai/collections/video-models](https://openrouter.ai/collections/video-models) works)
+- Uploaded reference images stay local as data URLs — nothing is uploaded to Muapi when using an OpenRouter key
+- Video-to-video tools and lip-sync have no OpenRouter equivalent and still require a Muapi key or local models
+
+Muapi keys keep working exactly as before.
+
+---
+
 ## ⬇️ Download Desktop App
 
 One-click installers — no Node.js or terminal required.

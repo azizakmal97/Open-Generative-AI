@@ -58,6 +58,20 @@ export function SettingsModal(onClose) {
                     placeholder="${t('settings.keyPlaceholder')}"
                     value="${localStorage.getItem('muapi_key') || ''}">
             </div>
+            <div>
+                <label style="display:block;font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;font-weight:600;">${t('settings.orImageModelLabel')} <span style="opacity:0.6;font-weight:400;">${t('settings.orModelHint')}</span></label>
+                <input id="settings-or-image-model" type="text"
+                    style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:0.75rem;padding:0.6rem 0.9rem;color:#fff;font-size:0.875rem;outline:none;"
+                    placeholder="google/gemini-2.5-flash-image"
+                    value="${localStorage.getItem('openrouter_image_model') || ''}">
+            </div>
+            <div>
+                <label style="display:block;font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;font-weight:600;">${t('settings.orVideoModelLabel')} <span style="opacity:0.6;font-weight:400;">${t('settings.orModelHint')}</span></label>
+                <input id="settings-or-video-model" type="text"
+                    style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:0.75rem;padding:0.6rem 0.9rem;color:#fff;font-size:0.875rem;outline:none;"
+                    placeholder="google/veo-3.1"
+                    value="${localStorage.getItem('openrouter_video_model') || ''}">
+            </div>
             <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin:0;">
                 ${t('settings.keyNote')}
             </p>
@@ -104,6 +118,12 @@ export function SettingsModal(onClose) {
         const key = apiPanel.querySelector('#settings-api-key').value.trim();
         if (key) {
             localStorage.setItem('muapi_key', key);
+            const imageModel = apiPanel.querySelector('#settings-or-image-model').value.trim();
+            if (imageModel) localStorage.setItem('openrouter_image_model', imageModel);
+            else localStorage.removeItem('openrouter_image_model');
+            const videoModel = apiPanel.querySelector('#settings-or-video-model').value.trim();
+            if (videoModel) localStorage.setItem('openrouter_video_model', videoModel);
+            else localStorage.removeItem('openrouter_video_model');
             close();
         } else {
             alert(t('settings.invalidKey'));
