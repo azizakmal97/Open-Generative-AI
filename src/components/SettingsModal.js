@@ -58,19 +58,21 @@ export function SettingsModal(onClose) {
                     placeholder="${t('settings.keyPlaceholder')}"
                     value="${localStorage.getItem('muapi_key') || ''}">
             </div>
-            <div>
-                <label style="display:block;font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;font-weight:600;">${t('settings.orImageModelLabel')} <span style="opacity:0.6;font-weight:400;">${t('settings.orModelHint')}</span></label>
-                <input id="settings-or-image-model" type="text"
-                    style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:0.75rem;padding:0.6rem 0.9rem;color:#fff;font-size:0.875rem;outline:none;"
-                    placeholder="google/gemini-2.5-flash-image"
-                    value="${localStorage.getItem('openrouter_image_model') || ''}">
-            </div>
-            <div>
-                <label style="display:block;font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;font-weight:600;">${t('settings.orVideoModelLabel')} <span style="opacity:0.6;font-weight:400;">${t('settings.orModelHint')}</span></label>
-                <input id="settings-or-video-model" type="text"
-                    style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:0.75rem;padding:0.6rem 0.9rem;color:#fff;font-size:0.875rem;outline:none;"
-                    placeholder="google/veo-3.1"
-                    value="${localStorage.getItem('openrouter_video_model') || ''}">
+            <div id="settings-or-fields" style="display:none;flex-direction:column;gap:0.75rem;">
+                <div>
+                    <label style="display:block;font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;font-weight:600;">${t('settings.orImageModelLabel')} <span style="opacity:0.6;font-weight:400;">${t('settings.orModelHint')}</span></label>
+                    <input id="settings-or-image-model" type="text"
+                        style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:0.75rem;padding:0.6rem 0.9rem;color:#fff;font-size:0.875rem;outline:none;"
+                        placeholder="google/gemini-2.5-flash-image"
+                        value="${localStorage.getItem('openrouter_image_model') || ''}">
+                </div>
+                <div>
+                    <label style="display:block;font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:0.4rem;font-weight:600;">${t('settings.orVideoModelLabel')} <span style="opacity:0.6;font-weight:400;">${t('settings.orModelHint')}</span></label>
+                    <input id="settings-or-video-model" type="text"
+                        style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:0.75rem;padding:0.6rem 0.9rem;color:#fff;font-size:0.875rem;outline:none;"
+                        placeholder="google/veo-3.1"
+                        value="${localStorage.getItem('openrouter_video_model') || ''}">
+                </div>
             </div>
             <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin:0;">
                 ${t('settings.keyNote')}
@@ -112,6 +114,16 @@ export function SettingsModal(onClose) {
         if (document.body.contains(overlay)) document.body.removeChild(overlay);
         if (onClose) onClose();
     };
+
+    // The OpenRouter fallback fields are advanced options; only surface them
+    // when the entered key is actually an OpenRouter key.
+    const keyInput = apiPanel.querySelector('#settings-api-key');
+    const orFields = apiPanel.querySelector('#settings-or-fields');
+    const toggleOrFields = () => {
+        orFields.style.display = keyInput.value.trim().startsWith('sk-or-') ? 'flex' : 'none';
+    };
+    keyInput.oninput = toggleOrFields;
+    toggleOrFields();
 
     apiPanel.querySelector('#settings-cancel-btn').onclick = close;
     apiPanel.querySelector('#settings-save-btn').onclick = () => {

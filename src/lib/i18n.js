@@ -96,7 +96,7 @@ const translations = {
         'settings.keyNote': 'Your API key is stored locally. Muapi keys go only to api.muapi.ai; OpenRouter keys (sk-or-...) go only to openrouter.ai and enable image and video generation.',
         'settings.orImageModelLabel': 'OpenRouter Fallback Image Model',
         'settings.orVideoModelLabel': 'OpenRouter Fallback Video Model',
-        'settings.orModelHint': '(sk-or-... keys: used when the model picked in the studio has no OpenRouter equivalent)',
+        'settings.orModelHint': '(optional — leave blank; used only when the model picked in the studio has no OpenRouter equivalent)',
         'settings.invalidKey': 'Please enter a valid API key.',
 
         // Auth Modal
@@ -300,7 +300,7 @@ const translations = {
         'settings.keyNote': '您的 API 密钥仅存储在本地。Muapi 密钥仅发送到 api.muapi.ai；OpenRouter 密钥（sk-or-...）仅发送到 openrouter.ai，可用于图像和视频生成。',
         'settings.orImageModelLabel': 'OpenRouter 备用图像模型',
         'settings.orVideoModelLabel': 'OpenRouter 备用视频模型',
-        'settings.orModelHint': '（sk-or-... 密钥：当工作室中选择的模型在 OpenRouter 上没有对应模型时使用）',
+        'settings.orModelHint': '（可选，可留空；仅当工作室中选择的模型在 OpenRouter 上没有对应模型时使用）',
         'settings.invalidKey': '请输入有效的 API 密钥。',
 
         // Auth Modal
