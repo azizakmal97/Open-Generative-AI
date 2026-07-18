@@ -35,6 +35,8 @@ function createWindow() {
             webSecurity: true,
             contextIsolation: true,
             nodeIntegration: false,
+            // Workflow/Agent studios embed the hosted web app in a <webview>
+            webviewTag: true,
             preload: path.join(__dirname, 'preload.js'),
         },
         ...(isMac ? { titleBarStyle: 'hiddenInset' } : {}),

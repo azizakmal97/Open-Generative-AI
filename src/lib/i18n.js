@@ -207,6 +207,8 @@ const translations = {
         // Agent Studio
         'agents.title': 'Agent Studio',
         'agents.webOnly': 'Available in the web app at open-generative-ai.com',
+        'hosted.note': (title) => `${title} runs on the hosted muapi.ai web app (requires internet and a muapi.ai account)`,
+        'hosted.openBrowser': 'Open in browser ↗',
 
         // Workflow Studio
         'workflows.title': 'Workflow Studio',
@@ -411,6 +413,8 @@ const translations = {
         // Agent Studio
         'agents.title': '智能体工作室',
         'agents.webOnly': '在网页应用 open-generative-ai.com 上可用',
+        'hosted.note': (title) => `${title} 在 muapi.ai 托管网页版中运行（需要联网和 muapi.ai 账号）`,
+        'hosted.openBrowser': '在浏览器中打开 ↗',
 
         // Workflow Studio
         'workflows.title': '工作流工作室',
